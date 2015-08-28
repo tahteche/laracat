@@ -2,26 +2,40 @@
 
 use Illuminate\Auth\UserInterface;
 
-class User extends Eloquent implements UserInterface
-{
+class User extends Eloquent implements UserInterface{
 
-	public function getAuthIdentifier() 
+  public function getAuthIdentifier() {
+    return $this->getKey();
+  }
+
+  public function getAuthPassword() {
+    return $this->password;
+  }
+
+  public function getRememberToken()
 	{
-		return $this->getKey();
+	    return $this->remember_token;
 	}
-	public function getAuthPassword()
+
+	public function setRememberToken($value)
 	{
-		return $this->password;
+	    $this->remember_token = $value;
 	}
-	public function cats()
+
+	public function getRememberTokenName()
 	{
-		return $this->hasMany('Cat');
+	    return 'remember_token';
 	}
-	public function owns(Cat $cat){
-		return $this->id == $cat->owner;
-	}
-	public function canEdit(Cat $cat)
-	{
-		return $this->is_admin or $this->owns($cat);
-	}
+
+  public function cats(){
+    return $this->hasMany('Cat', 'owner');
+  }
+
+  public function owns(Cat $cat){
+    return $this->id == $cat->owner;
+
+  }
+  public function canEdit(Cat $cat){
+    return $this->is_admin or $this->owns($cat);
+  }
 }
