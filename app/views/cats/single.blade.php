@@ -5,13 +5,16 @@
   <h2>
     {{{$cat->name}}}
   </h2>
-  <a href="{{URL::to('cats/'.$cat->id.'/edit')}}">
+  @if(Auth::check() and Auth::user()->canEdit($cat))
+    <a href="{{URL::to('cats/'.$cat->id.'/edit')}}">
     <span class="glyphicon glyphicon-edit"></span> Edit
-  </a>
-  <a href="{{URL::to('cats/'.$cat->id.'/delete')}}">
-    <span class="glyphicon glyphicon-trash"></span> Delete
-  </a>
-  Last edited: {{$cat->updated_at}}
+    </a>
+    <a href="{{URL::to('cats/'.$cat->id.'/delete')}}">
+      <span class="glyphicon glyphicon-trash"></span> Delete
+    </a>
+    Last edited: {{$cat->updated_at}}
+  @endif
+  
 @stop
 
 @section('content')
